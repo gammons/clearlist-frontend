@@ -10,14 +10,13 @@
     href="/"
     class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
   >
-    <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap" /></svg>
     <span class="fs-4">Sidebar</span>
   </a>
   <hr />
   <ul class="nav nav-pills flex-column mb-auto">
     <li class="nav-item">
       <a href="/" class="nav-link {path == '/' ? 'active' : 'text-white'}" aria-current="page">
-        <Icon name="activity" />
+        <i class="icon bi-bar-chart-line" />
         Home
       </a>
     </li>
@@ -27,7 +26,7 @@
         class="nav-link {path == '/verify' ? 'active' : 'text-white'}"
         aria-current="page"
       >
-        <Icon name="crosshair" />
+        <i class="icon bi-check" />
         Verify
       </a>
     </li>
@@ -37,7 +36,7 @@
         class="nav-link {path == '/integrations' ? 'active' : 'text-white'}"
         aria-current="page"
       >
-        <Icon name="chevron-right" />
+        <i class="icon bi-arrow-left-right" />
         Integrations
       </a>
     </li>
@@ -47,10 +46,8 @@
         class="nav-link {path == '/usage' ? 'active' : 'text-white'}"
         aria-current="page"
       >
-        <a href="#" class="nav-link text-white">
-          <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid" /></svg>
-          Usage
-        </a>
+        <i class="icon bi-speedometer" />
+        Usage
       </a>
     </li>
   </ul>

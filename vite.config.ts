@@ -6,7 +6,8 @@ const config: UserConfig = {
   plugins: [sveltekit()],
   resolve: {
     alias: {
-      '~bootstrap': path.resolve(__dirname, 'node_modules/bootstrap')
+      '~bootstrap': path.resolve(__dirname, 'node_modules/bootstrap'),
+      '~bootstrap-icons': path.resolve(__dirname, 'node_modules/bootstrap-icons')
     }
   }
 }
