@@ -1,5 +1,8 @@
 <script lang="ts">
+  import { page } from '$app/stores'
   import Icon from '../../lib/Icon.svelte'
+
+  $: path = $page.url.pathname
 </script>
 
 <div class="sidebar d-flex flex-column flex-shrink-0 p-3 text-white bg-dark">
@@ -13,27 +16,41 @@
   <hr />
   <ul class="nav nav-pills flex-column mb-auto">
     <li class="nav-item">
-      <a href="/" class="nav-link active" aria-current="page">
+      <a href="/" class="nav-link {path == '/' ? 'active' : 'text-white'}" aria-current="page">
         <Icon name="activity" />
         Home
       </a>
     </li>
     <li>
-      <a href="#" class="nav-link text-white">
+      <a
+        href="/verify"
+        class="nav-link {path == '/verify' ? 'active' : 'text-white'}"
+        aria-current="page"
+      >
         <Icon name="crosshair" />
         Verify
       </a>
     </li>
     <li>
-      <a href="/integrations" class="nav-link text-white">
+      <a
+        href="/integrations"
+        class="nav-link {path == '/integrations' ? 'active' : 'text-white'}"
+        aria-current="page"
+      >
         <Icon name="chevron-right" />
         Integrations
       </a>
     </li>
     <li>
-      <a href="#" class="nav-link text-white">
-        <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid" /></svg>
-        Usage
+      <a
+        href="/usage"
+        class="nav-link {path == '/usage' ? 'active' : 'text-white'}"
+        aria-current="page"
+      >
+        <a href="#" class="nav-link text-white">
+          <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid" /></svg>
+          Usage
+        </a>
       </a>
     </li>
   </ul>
