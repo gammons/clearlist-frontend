@@ -1,5 +1,4 @@
-// @flow
-import { Storeable } from "./storeable"
+import type { Storeable } from './storeable'
 
 export default class BrowserStorage implements Storeable {
   load(key: string) {
