@@ -1,10 +1,8 @@
-// @flow
-
 type ConstructorArgs = {
-  id: string,
-  name: string,
-  token: string,
-  active: boolean,
+  id: string
+  name: string
+  token: string
+  active: boolean
   lastUsedDate: string
 }
 

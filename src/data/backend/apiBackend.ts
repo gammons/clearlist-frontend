@@ -36,7 +36,6 @@ export default class ApiBackend implements Backendable {
       } else {
         opts.body = JSON.stringify(params)
       }
-      console.log('body = ', opts.body)
 
       fetch(url, opts)
         .then((resp) => {
