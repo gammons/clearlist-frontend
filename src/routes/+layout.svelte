@@ -15,7 +15,10 @@
       <Sidebar />
     </div>
 
-    <div class="col-10">
+    <div class="col-10 pt-3">
+      <div class="d-flex flex-row-reverse" style="1px solid blue">
+        <button type="button" class="btn btn-primary">Verify List</button>
+      </div>
       <slot />
     </div>
   </div>

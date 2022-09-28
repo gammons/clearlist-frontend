@@ -1,10 +1,9 @@
-import { redirect } from '@sveltejs/kit'
 import { browser } from '$app/environment'
 
 import BrowserStorage from '../data/storage/browserStorage'
 import UserStorage from '../data/storage/userStorage'
 
-import { userStore } from '../data/userStore'
+import { userStore } from '../data/stores'
 
 import { hydrateUser } from '../data/backend/userBackend'
 export const ssr = false // fuck me this is really important
