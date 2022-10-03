@@ -1,5 +1,10 @@
 <script lang="ts">
-  import { userStore } from '../../data/stores'
+  import { userStore, modalShowStore } from '../../data/stores'
+  import VerifyList from './VerifyList.svelte'
+
+  const openModal = () => {
+    modalShowStore.set('verify-list')
+  }
 
   export let title
 </script>
@@ -10,7 +15,8 @@
     <span class="credits-text">Credits:</span>
     <span class="credits">{$userStore.account.credits}</span>
   </div>
-  <button type="button" class="btn btn-primary">Verify New List</button>
+  <VerifyList />
+  <button on:click={openModal} type="button" class="btn btn-primary">Verify New List</button>
 </div>
 
 <style>

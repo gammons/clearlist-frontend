@@ -24,6 +24,11 @@ export const hydrateBatches = async (token: string): Promise<BatchModel[]> => {
       okForAllCount
       okCount
     }
+    user {
+      account {
+        credits
+      }
+    }
   }
   `
 

@@ -1,6 +1,8 @@
 import type AccountModel from './account'
 import type ApiKeyModel from './apiKey'
 
+import BrowserStorage from '../storage/browserStorage'
+
 export default class User {
   account: AccountModel
   apiKeys: ApiKeyModel[]
@@ -27,4 +29,10 @@ export default class User {
     this.lastLoginAt = args.lastLoginAt
     this.timeZone = args.timeZone
   }
+}
+
+export const userToken = () => {
+  const storage = new BrowserStorage()
+  const token = storage.load('token')
+  return token
 }

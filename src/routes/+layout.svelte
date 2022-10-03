@@ -1,7 +1,7 @@
 <script lang="ts">
   import '../scss/styles.scss'
   import { onMount } from 'svelte'
-  import { userStore } from '../data/stores'
+  import { userStore, modalShowStore } from '../data/stores'
 
   onMount(async () => {
     const bootstrap = await import('bootstrap')
@@ -21,6 +21,10 @@
     </div>
   </div>
 </div>
+
+{#if $modalShowStore !== ''}
+  <div class="modal-backdrop show" />
+{/if}
 
 <style>
   .credits {
