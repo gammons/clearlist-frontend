@@ -1,6 +1,7 @@
 <script lang="ts">
   import '../scss/styles.scss'
   import { onMount } from 'svelte'
+  import { userStore } from '../data/stores'
 
   onMount(async () => {
     const bootstrap = await import('bootstrap')
@@ -15,11 +16,14 @@
       <Sidebar />
     </div>
 
-    <div class="col-10 pt-3">
-      <div class="d-flex flex-row-reverse" style="1px solid blue">
-        <button type="button" class="btn btn-primary">Verify List</button>
-      </div>
+    <div class="col-10 pt-2">
       <slot />
     </div>
   </div>
 </div>
+
+<style>
+  .credits {
+    font-weight: bold;
+  }
+</style>

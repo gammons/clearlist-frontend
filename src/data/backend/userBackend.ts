@@ -39,7 +39,7 @@ export const hydrateUser = async (token: string): Promise<UserModel> => {
 
   const user = new UserModel({
     name: userData.name,
-    token: userData.token,
+    token: token,
     email: userData.email,
     imageUrl: userData.imageUrl,
     uuid: userData.uuid,

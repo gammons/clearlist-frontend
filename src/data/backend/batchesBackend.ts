@@ -8,12 +8,14 @@ export const hydrateBatches = async (token: string): Promise<BatchModel[]> => {
   query {
     batches {
       uuid
+      name
       createdAt
       updatedAt
       emailCount
       batchState
       batchType
       roleCount
+      disposableCount
       failedSyntaxCheckCount
       failedMxCheckCount
       failedSmtpCheckCount
@@ -28,13 +30,14 @@ export const hydrateBatches = async (token: string): Promise<BatchModel[]> => {
   const resp = await api.apiRequest('graphql', 'POST', token, { query: query })
   console.log('Resp =', resp)
   const batches = resp.data.batches.map((batch) => {
-    new BatchModel({
+    return new BatchModel({
       name: batch.name,
       uuid: batch.uuid,
       batchState: batch.batchState,
       batchType: batch.batchType,
       disposableCount: batch.disposableCount,
       roleCount: batch.roleCount,
+      emailCount: batch.emailCount,
       failedSyntaxCheckCount: batch.failedSyntaxCheckCount,
       failedMxCheckCount: batch.failedMxCheckCount,
       failedSmtpCheckCount: batch.failedSmtpCheckCount,

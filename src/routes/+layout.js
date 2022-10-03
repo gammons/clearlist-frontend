@@ -19,6 +19,7 @@ export async function load({ url: { searchParams } }) {
   let user = userStorage.loadUser()
   if (user === null) {
     user = await hydrateUser(token)
+    console.log('user = ', user)
     userStorage.saveUser(user)
   }
   userStore.set(user)

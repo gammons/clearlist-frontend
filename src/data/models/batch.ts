@@ -1,11 +1,25 @@
+import { backendUrl } from '../backend/apiBackend'
+
+export enum BatchState {
+  Pending = 'pending',
+  Processing = 'processing',
+  Completed = 'completed'
+}
+
+export enum BatchType {
+  UserImport = 0,
+  ApiImport = 1,
+  Integration = 2
+}
+
 export default class Batch {
   name: string
   uuid: string
   createdAt: string
   updatedAt: string
   emailCount: number
-  batchState: number
-  batchType: number
+  batchState: BatchState
+  batchType: BatchType
 
   disposableCount: number
   roleCount: number
@@ -32,5 +46,14 @@ export default class Batch {
     this.okForAllCount = args.okForAllCount
     this.okCount = args.okCount
     this.batchState = args.batchState
+  }
+
+  created() {
+    const date = new Date(Date.parse(this.createdAt))
+    return date.toDateString()
+  }
+
+  downloadLink(token: string): string {
+    return backendUrl() + `/api/v1/batches/${this.uuid}/download?key=${token}`
   }
 }

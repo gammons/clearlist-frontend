@@ -18,7 +18,7 @@ export default class ApiBackend implements Backendable {
       }
       const opts: OptsInterface = { headers, mode: 'cors', method }
 
-      let url = `${this.backendUrl()}/${path}`
+      let url = `${backendUrl()}/${path}`
 
       if (process.env.NODE_ENV !== 'production') {
         console.group()
@@ -51,16 +51,6 @@ export default class ApiBackend implements Backendable {
     })
   }
 
-  backendUrl() {
-    if (window.location.hostname === 'app.clearlist.io') {
-      return 'https://api.clearlist.io'
-    }
-    if (window.location.hostname === 'staging.clearlist.io') {
-      return 'https://api-stag.clearlist.io'
-    }
-    return 'http://localhost:3000'
-  }
-
   toQueryString(obj: object) {
     const parts = []
     for (let i in obj) {
@@ -70,4 +60,14 @@ export default class ApiBackend implements Backendable {
     }
     return parts.join('&')
   }
+}
+
+export const backendUrl = () => {
+  if (window.location.hostname === 'app.clearlist.io') {
+    return 'https://api.clearlist.io'
+  }
+  if (window.location.hostname === 'staging.clearlist.io') {
+    return 'https://api-stag.clearlist.io'
+  }
+  return 'http://localhost:3000'
 }

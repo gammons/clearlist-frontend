@@ -9,9 +9,9 @@
 <div class="sidebar d-flex flex-column flex-shrink-0 p-3 text-white bg-dark">
   <a
     href="/"
-    class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
+    class="d-flex align-items-center pt-3 mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
   >
-    <span class="fs-4">Sidebar</span>
+    <span class="fs-4">Clearlist.io</span>
   </a>
   <hr />
   <ul class="nav nav-pills flex-column mb-auto">
