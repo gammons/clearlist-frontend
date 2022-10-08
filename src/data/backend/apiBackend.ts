@@ -1,22 +1,25 @@
 import type { Backendable } from './backendable'
 
 export default class ApiBackend implements Backendable {
-  apiRequest(path: string, method: string, token: string, params: object = {}) {
+  apiRequest(path: string, method: string, token: string, params: object = {}, body?: FormData) {
     return new Promise((resolve, reject) => {
       const headers = new Headers()
       if (token) {
         headers.append('Authorization', `Bearer ${token}`)
       }
       headers.append('Accept', 'application/json')
-      headers.append('Content-Type', 'application/json')
+
+      if (!body) {
+        headers.append('Content-Type', 'application/json')
+      }
 
       interface OptsInterface {
         headers: Headers
         mode: RequestMode
         method: string
-        body?: string
+        body?: FormData | string
       }
-      const opts: OptsInterface = { headers, mode: 'cors', method }
+      const opts: OptsInterface = { headers, mode: 'cors', method, body }
 
       let url = `${backendUrl()}/${path}`
 
@@ -34,7 +37,7 @@ export default class ApiBackend implements Backendable {
       if (method === 'GET') {
         url += `?${this.toQueryString(params)}`
       } else {
-        opts.body = JSON.stringify(params)
+        opts.body ||= JSON.stringify(params)
       }
 
       fetch(url, opts)
