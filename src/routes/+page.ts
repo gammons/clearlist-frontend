@@ -8,7 +8,9 @@ import BatchModel from '../data/models/batch'
 import ApiBackend from '../data/backend/apiBackend'
 import { backendUrl } from '../data/backend/apiBackend'
 
-import { batchesStore, userStore } from '../data/stores'
+import { WebsocketHandler, WebsocketProcessor } from '../data/websocket'
+
+import { batchesStore, userStore, socketStore } from '../data/stores'
 
 export const ssr = false // fuck me this is really important
 
@@ -18,15 +20,17 @@ export async function load({ url: { searchParams } }) {
   let user = get(userStore)
   let batches = get(batchesStore)
 
+  if (!userToken()) {
+    throw redirect(302, backendUrl() + '/login')
+  }
+
   if (!batches || !user) {
     const ret = await hydrateData(userToken())
     batchesStore.set(ret.batches)
     userStore.set(ret.user)
   }
 
-  if (!get(userStore)) {
-    throw redirect(302, backendUrl() + '/login')
-  }
+  registerSocket()
 }
 
 const hydrateData = async (token: string): Promise<{ batches: BatchModel[]; user: UserModel }> => {
@@ -123,4 +127,17 @@ const hydrateData = async (token: string): Promise<{ batches: BatchModel[]; user
   })
 
   return { batches, user }
+}
+
+const registerSocket = () => {
+  const handler = new WebsocketHandler()
+
+  const processor = new WebsocketProcessor('clearlist_realtime', (data) => {
+    console.log('socket data = ', data)
+  })
+
+  handler.registerProcessor(processor)
+  handler.registerSocket(get(userStore))
+
+  socketStore.set(handler)
 }
