@@ -30,7 +30,28 @@ export async function load({ url: { searchParams } }) {
     userStore.set(ret.user)
   }
 
-  registerSocket()
+  registerSocket((data) => {
+    if (data.request !== 'batch_updated') return
+
+    console.log('data = ', data)
+
+    const batches = get(batchesStore)
+    const batch = batches.find((batch) => batch.uuid === data.data.uuid)
+
+    if (!batch) return
+
+    batch.batchState = data.data.batchState
+    batch.processedCount = data.data.processedCount
+    batch.disposableCount = data.data.disposableCount
+    batch.roleCount = data.data.roleCount
+    batch.failedSyntaxCheckCount = data.data.failedSyntaxCheckCount
+    batch.failedMxCheckCount = data.data.failedMxCheckCount
+    batch.failedSmtpCheckCount = data.data.failedSmtpCheckCount
+    batch.failedNoMailboxCount = data.data.failedNoMailboxCount
+    batch.okForAllCount = data.data.okForAllCount
+    batch.okCount = data.data.okCount
+    batchesStore.set(batches)
+  })
 }
 
 const hydrateData = async (token: string): Promise<{ batches: BatchModel[]; user: UserModel }> => {
@@ -129,12 +150,10 @@ const hydrateData = async (token: string): Promise<{ batches: BatchModel[]; user
   return { batches, user }
 }
 
-const registerSocket = () => {
+const registerSocket = (socketHandlerFn: (data: any) => void) => {
   const handler = new WebsocketHandler()
 
-  const processor = new WebsocketProcessor('clearlist_realtime', (data) => {
-    console.log('socket data = ', data)
-  })
+  const processor = new WebsocketProcessor('clearlist_realtime', socketHandlerFn)
 
   handler.registerProcessor(processor)
   handler.registerSocket(get(userStore))

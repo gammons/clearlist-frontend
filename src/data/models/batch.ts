@@ -17,6 +17,7 @@ export default class Batch {
   uuid: string
   createdAt: string
   updatedAt: string
+  processedCount: number
   emailCount: number
   batchState: BatchState
   batchType: BatchType
@@ -35,6 +36,7 @@ export default class Batch {
     this.uuid = args.uuid
     this.createdAt = args.createdAt
     this.updatedAt = args.updatedAt
+    this.processedCount = args.processedCount
     this.emailCount = args.emailCount
     this.batchType = args.batchType
     this.disposableCount = args.disposableCount
@@ -55,5 +57,9 @@ export default class Batch {
 
   downloadLink(token: string): string {
     return backendUrl() + `/api/v1/batches/${this.uuid}/download?key=${token}`
+  }
+
+  percentComplete(): number {
+    return Math.round((this.processedCount / this.emailCount) * 100)
   }
 }
