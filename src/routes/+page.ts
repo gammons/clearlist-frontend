@@ -33,8 +33,6 @@ export async function load({ url: { searchParams } }) {
   registerSocket((data) => {
     if (data.request !== 'batch_updated') return
 
-    console.log('data = ', data)
-
     const batches = get(batchesStore)
     const batch = batches.find((batch) => batch.uuid === data.data.uuid)
 
@@ -104,7 +102,7 @@ const hydrateData = async (token: string): Promise<{ batches: BatchModel[]; user
   `
 
   const resp = await api.apiRequest('graphql', 'POST', token, { query: query })
-  console.log('resp = ', resp)
+
   const batches = resp.data.batches.map((batch) => {
     return new BatchModel({
       name: batch.name,

@@ -1,6 +1,8 @@
 <script lang="ts">
   import Chart from 'chart.js/auto'
-  import { onMount } from 'svelte'
+  import { onMount, afterUpdate } from 'svelte'
+
+  let charts = []
 
   import { batchesStore } from '../data/stores'
   import { userStore } from '../data/stores'
@@ -17,30 +19,36 @@
     batchesStore.set($batchesStore)
   }
 
-  onMount(async () => {
-    $batchesStore.forEach((batch) => {
-      const ctx = document.getElementById(batch.uuid)
-      const chart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Ok', 'Risk', 'Invalid'],
-          datasets: [
-            {
-              label: 'Data',
-              data: [
-                batch.okCount,
-                batch.roleCount + batch.disposableCount + batch.okForAllCount,
-                batch.failedSyntaxCheckCount +
-                  batch.failedMxCheckCount +
-                  batch.failedNoMailboxCount +
-                  batch.failedSmtpCheckCount
-              ],
-              backgroundColor: ['#a3be8c', '#ebcb8b', '#bf616a']
-            }
-          ]
-        }
-      })
+  const renderChart = (batch) => {
+    if (batch.batchState !== 'completed') return
+    if (charts.findIndex((c) => c.batch_id === batch.uuid) !== -1) return
+
+    const ctx = document.getElementById(batch.uuid)
+    const chart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Ok', 'Risk', 'Invalid'],
+        datasets: [
+          {
+            label: 'Data',
+            data: [
+              batch.okCount,
+              batch.roleCount + batch.disposableCount + batch.okForAllCount,
+              batch.failedSyntaxCheckCount +
+                batch.failedMxCheckCount +
+                batch.failedNoMailboxCount +
+                batch.failedSmtpCheckCount
+            ],
+            backgroundColor: ['#a3be8c', '#ebcb8b', '#bf616a']
+          }
+        ]
+      }
     })
+    charts.push({ chart: chart, batch_id: batch.uuid })
+  }
+
+  afterUpdate(() => {
+    $batchesStore.forEach(renderChart)
   })
 </script>
 
