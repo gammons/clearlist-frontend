@@ -6,12 +6,12 @@
   $: path = $page.url.pathname
 </script>
 
-<div class="sidebar d-flex flex-column flex-shrink-0 p-3 text-white bg-dark">
+<div class="sidebar d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white bg-dark min-vh-100">
   <a
     href="/"
     class="d-flex align-items-center pt-3 mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
   >
-    <span class="fs-4">Clearlist.io</span>
+    <span class="fs-4 d-none d-sm-inline">Clearlist.io</span>
   </a>
   <hr />
   <ul class="nav nav-pills flex-column mb-auto">
@@ -28,7 +28,7 @@
         aria-current="page"
       >
         <i class="icon bi-check" />
-        Verify
+        List Verify
       </a>
     </li>
     <li>
@@ -75,6 +75,10 @@
 
 <style>
   .sidebar {
-    height: 100vh;
+    height: 100%;
+    position: fixed;
+    z-index: 1;
+    top:0;
+    left: 0;
   }
 </style>
