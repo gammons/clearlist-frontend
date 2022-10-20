@@ -59,6 +59,19 @@ export default class Batch {
     return backendUrl() + `/api/v1/batches/${this.uuid}/download?key=${token}`
   }
 
+  riskCount(): number {
+    return this.roleCount + this.disposableCount + this.okForAllCount
+  }
+
+  invalidCount(): number {
+    return (
+      this.failedSyntaxCheckCount +
+      this.failedNoMailboxCount +
+      this.failedMxCheckCount +
+      this.failedSmtpCheckCount
+    )
+  }
+
   percentComplete(): number {
     return Math.round((this.processedCount / this.emailCount) * 100)
   }

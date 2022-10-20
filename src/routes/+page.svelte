@@ -31,14 +31,7 @@
         datasets: [
           {
             label: 'Data',
-            data: [
-              batch.okCount,
-              batch.roleCount + batch.disposableCount + batch.okForAllCount,
-              batch.failedSyntaxCheckCount +
-                batch.failedMxCheckCount +
-                batch.failedNoMailboxCount +
-                batch.failedSmtpCheckCount
-            ],
+            data: [batch.okCount, batch.riskCount(), batch.invalidCount()],
             backgroundColor: ['#a3be8c', '#ebcb8b', '#bf616a']
           }
         ]
