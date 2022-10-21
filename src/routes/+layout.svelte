@@ -16,7 +16,7 @@
       <Sidebar />
     </div>
 
-    <div class="col pt-2">
+    <div class="col pt-2 min-vh-100">
       <slot />
     </div>
   </div>

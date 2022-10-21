@@ -43,12 +43,12 @@
     </li>
     <li>
       <a
-        href="/usage"
+        href="/developers"
         class="nav-link {path == '/usage' ? 'active' : 'text-white'}"
         aria-current="page"
       >
         <i class="icon bi-speedometer" />
-        Usage
+        Developers
       </a>
     </li>
   </ul>

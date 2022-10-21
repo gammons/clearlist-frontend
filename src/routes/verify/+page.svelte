@@ -59,48 +59,53 @@
   {/if}
 
   {#each $batchesStore as batch}
-    <div class="shadow-sm p-2 m-4">
-      <h3>{batch.name}</h3>
-      <div class="timestamp">Uploaded {batch.created()}</div>
+    <div class="card p-2 m-4">
+      <div class="card-body">
+        <h3>{batch.name}</h3>
+        <div class="timestamp">Uploaded {batch.created()}</div>
 
-      <div class="d-flex flex-row">
-        <div class="panel">
-          <ul>
-            <li>Records: {batch.emailCount}</li>
-            <li>State: {batch.batchState}</li>
-            {#if batch.batchState === 'processing'}
-              <li>Complete: {batch.percentComplete()}%</li>
-            {/if}
-          </ul>
-        </div>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col panel">
+              <ul>
+                <li>Records: {batch.emailCount}</li>
+                <li>State: {batch.batchState}</li>
+                {#if batch.batchState === 'processing'}
+                  <li>Complete: {batch.percentComplete()}%</li>
+                {/if}
+              </ul>
+            </div>
 
-        <div class="panel">
-          {#if batch.batchState === 'completed'}
-            <ul>
-              <li>OK: {batch.okCount}</li>
-              <li>OK for all: {batch.okForAllCount}</li>
-              <li>Disposable: {batch.disposableCount}</li>
-              <li>Failed syntax check: {batch.failedSyntaxCheckCount}</li>
-              <li>Failed MX check: {batch.failedMxCheckCount}</li>
-              <li>Failed SMTP check: {batch.failedSmtpCheckCount}</li>
-              <li>Failed No mailbox: {batch.failedNoMailboxCount}</li>
-            </ul>
-          {/if}
-        </div>
+            <div class="col panel">
+              {#if batch.batchState === 'completed'}
+                <ul>
+                  <li>OK: {batch.okCount}</li>
+                  <li>OK for all: {batch.okForAllCount}</li>
+                  <li>Disposable: {batch.disposableCount}</li>
+                  <li>Failed syntax check: {batch.failedSyntaxCheckCount}</li>
+                  <li>Failed MX check: {batch.failedMxCheckCount}</li>
+                  <li>Failed SMTP check: {batch.failedSmtpCheckCount}</li>
+                  <li>Failed No mailbox: {batch.failedNoMailboxCount}</li>
+                </ul>
+              {/if}
+            </div>
 
-        <div class="chart">
-          {#if batch.batchState == 'completed' || batch.batchState == 'processing'}
-            <canvas id={batch.uuid} width="200" height="200" />
-          {/if}
-        </div>
+            <div class="col chart">
+              {#if batch.batchState == 'completed' || batch.batchState == 'processing'}
+                <canvas id={batch.uuid} width="200" height="200" />
+              {/if}
+            </div>
 
-        <div>
-          {#if batch.batchState == 'completed'}
-            <a class="btn btn-primary" href={batch.downloadLink($userStore.token)}>Download</a>
-          {/if}
-          {#if batch.batchState == 'pending'}
-            <a class="btn btn-success" on:click={() => startBatch(batch.uuid)}>Start</a>
-          {/if}
+            <div>
+              {#if batch.batchState == 'completed'}
+                <a class="btn btn-primary" href={batch.downloadLink($userStore.token)}>Download</a>
+              {/if}
+              {#if batch.batchState == 'pending'}
+                <a class="btn btn-success" on:click={() => startBatch(batch.uuid)}>Start</a>
+              {/if}
+            </div>
+
+          </div> <!-- row -->
         </div>
       </div>
     </div>
