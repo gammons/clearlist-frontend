@@ -1,48 +1,12 @@
 <script lang="ts">
-  import Chart from 'chart.js/auto'
-  import { onMount, afterUpdate } from 'svelte'
-
-  let charts = []
+  import CompletedBatch from './CompletedBatch.svelte'
+  import PendingBatch from './PendingBatch.svelte'
+  import ProcessingBatch from './ProcessingBatch.svelte'
 
   import { batchesStore } from '../../data/stores'
   import { userStore } from '../../data/stores'
-  import ApiBackend from '../../data/backend/apiBackend'
   import Top from '../nav/Top.svelte'
 
-  const startBatch = async (uuid: string) => {
-    const batch = $batchesStore.find((batch) => batch.uuid === uuid)
-    batch.batchState = 'processing'
-
-    const backend = new ApiBackend()
-    await backend.apiRequest(`api/v1/batches/${batch.uuid}/start`, 'PUT', $userStore.token)
-
-    batchesStore.set($batchesStore)
-  }
-
-  const renderChart = (batch) => {
-    if (batch.batchState !== 'completed') return
-    if (charts.findIndex((c) => c.batch_id === batch.uuid) !== -1) return
-
-    const ctx = document.getElementById(batch.uuid)
-    const chart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['Ok', 'Risk', 'Invalid'],
-        datasets: [
-          {
-            label: 'Data',
-            data: [batch.okCount, batch.riskCount(), batch.invalidCount()],
-            backgroundColor: ['#a3be8c', '#ebcb8b', '#bf616a']
-          }
-        ]
-      }
-    })
-    charts.push({ chart: chart, batch_id: batch.uuid })
-  }
-
-  afterUpdate(() => {
-    $batchesStore.forEach(renderChart)
-  })
 </script>
 
 <Top title="Your Lists" />
@@ -59,56 +23,13 @@
   {/if}
 
   {#each $batchesStore as batch}
-    <div class="card p-2 m-4">
-      <div class="card-body">
-        <h3>{batch.name}</h3>
-        <div class="timestamp">Uploaded {batch.created()}</div>
-
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col panel">
-              <ul>
-                <li>Records: {batch.emailCount}</li>
-                <li>State: {batch.batchState}</li>
-                {#if batch.batchState === 'processing'}
-                  <li>Complete: {batch.percentComplete()}%</li>
-                {/if}
-              </ul>
-            </div>
-
-            <div class="col panel">
-              {#if batch.batchState === 'completed'}
-                <ul>
-                  <li>OK: {batch.okCount}</li>
-                  <li>OK for all: {batch.okForAllCount}</li>
-                  <li>Disposable: {batch.disposableCount}</li>
-                  <li>Failed syntax check: {batch.failedSyntaxCheckCount}</li>
-                  <li>Failed MX check: {batch.failedMxCheckCount}</li>
-                  <li>Failed SMTP check: {batch.failedSmtpCheckCount}</li>
-                  <li>Failed No mailbox: {batch.failedNoMailboxCount}</li>
-                </ul>
-              {/if}
-            </div>
-
-            <div class="col chart">
-              {#if batch.batchState == 'completed' || batch.batchState == 'processing'}
-                <canvas id={batch.uuid} width="200" height="200" />
-              {/if}
-            </div>
-
-            <div>
-              {#if batch.batchState == 'completed'}
-                <a class="btn btn-primary" href={batch.downloadLink($userStore.token)}>Download</a>
-              {/if}
-              {#if batch.batchState == 'pending'}
-                <a class="btn btn-success" on:click={() => startBatch(batch.uuid)}>Start</a>
-              {/if}
-            </div>
-
-          </div> <!-- row -->
-        </div>
-      </div>
-    </div>
+    {#if batch.batchState == 'completed'}
+      <CompletedBatch batch={batch} />
+    {:else if batch.batchState == 'pending' }
+      <PendingBatch batch={batch} />
+    {:else if batch.batchState == 'processing' }
+      <ProcessingBatch batch={batch} />
+    {/if}
   {/each}
 </div>
 
