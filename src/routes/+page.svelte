@@ -1,4 +1,5 @@
 <script lang="ts">
+  console.log("page load")
   import Chart from 'chart.js/auto'
   import { onMount, afterUpdate } from 'svelte'
 

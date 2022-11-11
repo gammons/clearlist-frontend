@@ -53,7 +53,7 @@ export async function load({ url: { searchParams } }) {
 }
 
 const hydrateData = async (token: string): Promise<{ batches: BatchModel[]; user: UserModel }> => {
-  const api = new ApiBackend()
+  const api = new ApiBackend(token)
 
   const query = `
   fragment userFields on User {
@@ -101,7 +101,7 @@ const hydrateData = async (token: string): Promise<{ batches: BatchModel[]; user
   }
   `
 
-  const resp = await api.apiRequest('graphql', 'POST', token, { query: query })
+  const resp = await api.apiRequest('graphql', 'POST', { query: query })
 
   const batches = resp.data.batches.map((batch) => {
     return new BatchModel({

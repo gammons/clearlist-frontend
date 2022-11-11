@@ -1,9 +1,10 @@
 <script lang="ts">
   import { userStore, modalShowStore } from '../../data/stores'
-  import VerifyList from './VerifyList.svelte'
+  import VerifyListModal from '../verify/VerifyListModal.svelte'
+  import Modals from './Modals.svelte'
 
-  const openModal = () => {
-    modalShowStore.set('verify-list')
+  const openModal = (modalKey: string) => {
+    modalShowStore.set(modalKey)
   }
 
   export let title
@@ -11,20 +12,28 @@
 
 <div class="top-nav p-3 d-flex flex-row justify-content-end align-items-center">
   <h3 class="flex-grow-1">{title}</h3>
-  <div class="p-2">
+  <div class="px-4">
+    <div>
     <span class="credits-text">Credits:</span>
-    <span class="credits">{$userStore.account.credits}</span>
+    <span class="credits">{$userStore.account.credits.toLocaleString()}</span>
+    </div>
+    <a class="link" on:click={() => openModal('purchase-credits') }>Need more?</a>
   </div>
-  <VerifyList />
-  <button on:click={openModal} type="button" class="btn btn-primary">Verify New List</button>
+  <button on:click={() => openModal('verify-list')} type="button" class="btn btn-primary">Verify New List</button>
 </div>
 
+<Modals />
+
 <style>
-  .credits-text {
+  .credits {
     font-weight: bold;
   }
 
   .top-nav {
     border-bottom: 1px solid #ccc;
+  }
+
+  .link {
+    cursor: hand;
   }
 </style>

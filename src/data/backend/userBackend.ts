@@ -3,7 +3,7 @@ import UserModel from '../models/user'
 import AccountModel from '../models/account'
 
 export const hydrateUser = async (token: string): Promise<UserModel> => {
-  const api = new ApiBackend()
+  const api = new ApiBackend(token)
 
   const query = `
   fragment userFields on User {
@@ -33,7 +33,7 @@ export const hydrateUser = async (token: string): Promise<UserModel> => {
   }
   `
 
-  const resp = await api.apiRequest('graphql', 'POST', token, { query: query })
+  const resp = await api.apiRequest('graphql', 'POST', { query: query })
   const userData = resp.data.user
   const accountData = resp.data.user.account
 

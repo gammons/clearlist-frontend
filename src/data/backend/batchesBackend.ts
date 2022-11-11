@@ -2,7 +2,7 @@ import ApiBackend from './apiBackend'
 import BatchModel from '../models/batch'
 
 export const hydrateBatches = async (token: string): Promise<BatchModel[]> => {
-  const api = new ApiBackend()
+  const api = new ApiBackend(token)
 
   const query = `
   query {
@@ -32,7 +32,7 @@ export const hydrateBatches = async (token: string): Promise<BatchModel[]> => {
   }
   `
 
-  const resp = await api.apiRequest('graphql', 'POST', token, { query: query })
+  const resp = await api.apiRequest('graphql', 'POST', { query: query })
   console.log('Resp =', resp)
   const batches = resp.data.batches.map((batch) => {
     return new BatchModel({

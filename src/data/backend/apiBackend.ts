@@ -1,11 +1,17 @@
 import type { Backendable } from './backendable'
 
 export default class ApiBackend implements Backendable {
-  apiRequest(path: string, method: string, token: string, params: object = {}, body?: FormData) {
+  token: string
+
+  constructor(token: string) {
+    this.token = token
+  }
+
+  apiRequest(path: string, method: string, params: object = {}, body?: FormData) {
     return new Promise((resolve, reject) => {
       const headers = new Headers()
-      if (token) {
-        headers.append('Authorization', `Bearer ${token}`)
+      if (this.token) {
+        headers.append('Authorization', `Bearer ${this.token}`)
       }
       headers.append('Accept', 'application/json')
 
@@ -29,7 +35,7 @@ export default class ApiBackend implements Backendable {
         console.log('API request: ', url)
         console.log('API method: ', method)
         console.log('API params: ', params)
-        console.log('Using token: ', token)
+        console.log('Using token: ', this.token)
         console.log('******************************')
         console.groupEnd()
       }

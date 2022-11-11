@@ -8,8 +8,8 @@
     const batch = $batchesStore.find((batch) => batch.uuid === uuid)
     batch.batchState = 'processing'
 
-    const backend = new ApiBackend()
-    await backend.apiRequest(`api/v1/batches/${batch.uuid}/start`, 'PUT', $userStore.token)
+    const backend = new ApiBackend($userStore.token)
+    await backend.apiRequest(`api/v1/batches/${batch.uuid}/start`, 'PUT')
 
     batchesStore.set($batchesStore)
   }

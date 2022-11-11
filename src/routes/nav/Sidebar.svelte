@@ -3,6 +3,8 @@
 
   import { userStore } from '../../data/stores'
 
+  console.log("sidebar load")
+
   $: path = $page.url.pathname
 </script>
 
@@ -66,7 +68,7 @@
     </a>
     <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
       <li><a class="dropdown-item" href="#">Verify new list...</a></li>
-      <li><a class="dropdown-item" href="#">Profile</a></li>
+      <li><a class="dropdown-item" href="/profile">Profile</a></li>
       <li><hr class="dropdown-divider" /></li>
       <li><a class="dropdown-item" href="#">Sign out</a></li>
     </ul>
