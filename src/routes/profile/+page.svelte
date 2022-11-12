@@ -38,15 +38,29 @@
 
   const onSubmitPaymentForm = async () => {
   }
+
+  const toDate = (seconds: int): Date => {
+    const d = new Date(0)
+    d.setUTCSeconds(seconds)
+    return d.toDateString()
+  }
+
+  const toCost = (cents: int): string => {
+    const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+
+    return formatter.format(cents / 100)
+  }
 </script>
 
 <Top title="Profile" />
 
 <div class="d-flex flex-column m-3">
   <h2>Credits</h2>
-  <div class="py-3">
-    jj
-  </div>
 
   <h2>Payment methods</h2>
 
@@ -73,6 +87,30 @@
       </div>
     </form>
   </div>
+
   <h2>Invoices</h2>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Credits</th>
+        <th scope="col">Cost</th>
+        <th scope="col">Download</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {#each data.invoices as invoice}
+        <tr>
+          <td>{toDate(invoice.created)}</td>
+          <td>{invoice.quantity}</td>
+          <td>{toCost(invoice.total)}</td>
+          <td><a href="{invoice.pdf_link}">PDF</a></td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+
 </div>
 
