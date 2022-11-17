@@ -1,5 +1,4 @@
 <script lang="ts">
-  console.log("layout load")
   import '../scss/styles.scss'
   import { onMount } from 'svelte'
   import { modalShowStore } from '../data/stores'

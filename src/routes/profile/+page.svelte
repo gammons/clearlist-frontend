@@ -6,6 +6,7 @@
 
   export let data
   let showAddCardForm = false
+  let showAddCardAlert = false
 
   const api = new ApiBackend(userToken())
 
@@ -13,9 +14,8 @@
     showAddCardForm = true
 
     const resp = await api.apiRequest('/api/v1/payments/create_setup_intent', 'GET')
-
     const stripe = await loadStripe(import.meta.env.VITE_STRIPE_API_KEY)
-    const elements = stripe.elements({clientSecret: data.clientSecret});
+    const elements = stripe.elements({clientSecret: resp.client_secret});
     const paymentElement = elements.create('payment');
     paymentElement.mount('#payment-element');
 
@@ -27,16 +27,22 @@
         elements,
         confirmParams: {
           return_url: window.location.href
-        }
+        },
+        redirect: 'if_required'
       })
       if (error) {
         const messageContainer = document.querySelector('#error-message');
         messageContainer.textContent = error.message;
+      } else {
+        const resp = await api.apiRequest('/api/v1/payments/confirm_payment_method', 'POST')
+        $: data.cardInfo = resp
+        $: showAddCardForm = false
+        $: showAddCardAlert = true
+        setTimeout(() => {
+          $: showAddCardAlert = false
+        }, 5000)
       }
     })
-  }
-
-  const onSubmitPaymentForm = async () => {
   }
 
   const toDate = (seconds: int): Date => {
@@ -59,23 +65,27 @@
 
 <Top title="Profile" />
 
+
 <div class="d-flex flex-column m-3">
   <h2>Credits</h2>
+
+  <div>
+  </div>
 
   <h2>Payment methods</h2>
 
   <div class="py-3">
     {#if data.cardInfo}
-      <p>Your current card on file is a {data.cardInfo.brand} ending in {data.cardInfo.last4}.</p>
+      <p>Your current card on file is a <span class="card-brand">{data.cardInfo.brand}</span> ending in {data.cardInfo.last4}.</p>
+      <a class="{showAddCardForm ? 'd-none' : ''}" href='#' on:click={addPaymentMethod}>Click here to change your card on file</a>
     {:else}
       <p>You do not have a payment method on file.  In order to purchase credits, please add a payment method.</p>
+      <a class="{showAddCardForm ? 'd-none' : ''}" href='#' on:click={addPaymentMethod}>Click here to add a payment method</a>
     {/if}
 
-    {#if data.cardInfo}
-    <a class="{showAddCardForm ? 'd-none' : ''}" href='#' on:click={addPaymentMethod}>Click here to change your card on file</a>
-    {:else}
-    <a class="{showAddCardForm ? 'd-none' : ''}" href='#' on:click={addPaymentMethod}>Click here to add a payment method</a>
-    {/if}
+    <div class="alert alert-primary {showAddCardAlert ? '' :'d-none'}" role="alert">
+      <p>You have successfully added a card on file.</p>
+    </div>
 
     <form id="payment-form" class="{showAddCardForm ? '' : 'd-none'}">
       <div id="payment-element">
@@ -113,4 +123,11 @@
   </table>
 
 </div>
+
+
+<style>
+  .card-brand {
+    text-transform:capitalize;
+  }
+</style>
 

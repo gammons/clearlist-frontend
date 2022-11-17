@@ -1,2 +1,8 @@
+@import 'reset.css';
 @import '~bootstrap/scss/bootstrap';
 @import '~bootstrap-icons/font/bootstrap-icons.css';
+
+p {
+  margin-bottom: 0;
+}
+
